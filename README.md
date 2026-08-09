@@ -16,7 +16,7 @@ Automatically scrapes business emails from Google Maps based on a list of querie
 | Item | Value |
 |------|-------|
 | Template source | https://n8n.io/workflows/2567 (MIT, 206,002 views) |
-| n8n workflow ID | `X4bpwfPoyiRY6fL5` |
+| n8n workflow ID | `hwiZNuABczj2Cd4y` |
 | Workflow name | AI Lead Generation System - Velcora AI |
 | Nodes | 26 (core nodes only) |
 | Cost | $0 — no paid APIs |

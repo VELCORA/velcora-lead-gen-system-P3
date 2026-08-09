@@ -55,6 +55,6 @@
 
 ## Workflow Details
 
-- **Workflow ID in n8n:** `X4bpwfPoyiRY6fL5`
+- **Workflow ID in n8n:** `hwiZNuABczj2Cd4y`
 - **GitHub Repo:** [VELCORA/velcora-lead-gen-system](https://github.com/VELCORA/velcora-lead-gen-system)
 - **Cost:** $0 (Uses only core n8n nodes, zero paid APIs)
