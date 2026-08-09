@@ -5,67 +5,56 @@
 - n8n running at http://localhost:5678
 - A Google account (free) for Google Sheets
 
-## Step 1: Import the Workflow (done — re-import only if needed)
+---
 
-Workflow is already imported and ACTIVE in n8n:
-- ID: `X4bpwfPoyiRY6fL5`
+## STEP 1: Create Your Google Sheet (Takes 30 Seconds)
 
-To re-import (fresh copy):
-```bash
-python -c "import json, urllib.request; wf=json.load(open(r'C:\Users\sithe\Documents\Default Project\velcora-portfolio-projects\lead-gen-system\workflow.json', encoding='utf-8')); req=urllib.request.Request('http://localhost:5678/api/v1/workflows', data=json.dumps(wf).encode(), headers={'Content-Type':'application/json','X-N8N-API-KEY':'<API_KEY>'}, method='POST'); print(json.loads(urllib.request.urlopen(req).read().decode())['id'])"
-```
+1. Open your browser and go directly to: **https://sheets.new** (this instantly creates a new blank spreadsheet).
+2. Rename the spreadsheet (top-left corner) to: `Lead Gen Results`
+3. In **Row 1**, put these exact headers from Column A to H:
+   - **A1**: `Business Name`
+   - **B1**: `Website`
+   - **C1**: `Email`
+   - **D1**: `Phone`
+   - **E1**: `Address`
+   - **F1**: `Industry`
+   - **G1**: `Source URL`
+   - **H1**: `Discovered At`
 
-## Step 2: Create the Google Sheet (REQUIRED — one-time)
+---
 
-1. Go to https://sheets.new
-2. Create a spreadsheet named `Lead Gen Results`
-3. First row headers:
+## STEP 2: Copy Your Google Sheet ID
 
-| A | B | C | D | E | F | G | H |
-|---|---|---|---|---|---|---|---|
-| Business Name | Website | Email | Phone | Address | Industry | Source URL | Discovered At |
+1. Look at your browser's URL bar while on that spreadsheet. The URL looks like this:
+   `https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit#gid=0`
+2. Copy the long random string between `/d/` and `/edit` (e.g., `1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms`). **That is your Sheet ID.**
 
-4. Copy the **sheet ID** from the URL: `https://docs.google.com/spreadsheets/d/<SHEET_ID>/edit`
+---
 
-## Step 3: Point the Workflow at the Sheet (REQUIRED)
+## STEP 3: Connect It in n8n
 
-1. Open n8n → **AI Lead Generation System - Velcora AI**
-2. Open the **Save emails to Google Sheet** node
-3. Credential: **Google Sheets account** (already linked)
-4. Document: paste your `<SHEET_ID>` from Step 2
-5. Sheet: leave as `gid=0` (first tab)
-6. Save
+1. Go to your n8n tab: **http://localhost:5678**
+2. Click on workflow: **AI Lead Generation System - Velcora AI**
+3. Double-click the last node: **Save emails to Google Sheet**
+4. In the **Document ID** field, paste the Sheet ID you copied in Step 2.
+5. Click **Save** in the top right.
 
-## Step 4: Add Your Queries
+---
 
-In the **Run workflow** manual trigger, when executing, enter queries as a JSON array:
-```json
-[{"query": "digital marketing agencies in Mumbai"}, {"query": "real estate agents in Delhi"}, {"query": "restaurants in Bangalore"}]
-```
-Format: `<business type> in <location>`
+## STEP 4: Run and Test
 
-## Step 5: Test
+1. Click **Execute Workflow** (top right or bottom of the trigger node).
+2. When prompted for input data in the manual trigger, enter:
+   ```json
+   [{"query": "cafes in Mumbai"}]
+   ```
+3. Click **Execute Node** or **Test workflow**.
+4. Check your `Lead Gen Results` Google Sheet — emails will appear automatically!
 
-1. Click **Execute workflow**
-2. Watch **All executions** (scraper runs in background per query)
-3. Check `Lead Gen Results` sheet for emails
-4. If no emails: some businesses simply don't publish emails — try different queries, or loosen the email regex in the **Filter irrelevant emails** node
+---
 
-## Node Map
+## Workflow Details
 
-| Node | Role |
-|------|------|
-| Run workflow | Manual trigger — paste your queries |
-| Loop over queries | One scraper run per query |
-| Search Google Maps with query | HTTP request to Google Maps search |
-| Scrape URLs from results | Code — extracts listing URLs |
-| Filter irrelevant URLs | Regex filter |
-| Loop over URLs / pages | Pagination + per-listing fetch |
-| Scrape emails from page | Code — regex email extraction |
-| Save emails to Google Sheet | Google Sheets append |
-
-## Troubleshooting
-
-- **Google Sheets auth error**: re-auth the credential (Settings → Credentials → Google Sheets account)
-- **Too slow**: lower the wait node delay or remove it (Sticky Note 2)
-- **Emails missing**: regex too strict in **Filter irrelevant emails** — adjust it
+- **Workflow ID in n8n:** `X4bpwfPoyiRY6fL5`
+- **GitHub Repo:** [VELCORA/velcora-lead-gen-system](https://github.com/VELCORA/velcora-lead-gen-system)
+- **Cost:** $0 (Uses only core n8n nodes, zero paid APIs)
