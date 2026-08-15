@@ -1,77 +1,69 @@
 {
-  "name": "AI Lead Generation System - Velcora AI",
+  "name": "Velcora Lead Engine",
   "nodes": [
     {
+      "parameters": {},
       "id": "79df5316-c210-478d-a4de-35b5d31924ee",
       "name": "Remove Duplicate URLs",
       "type": "n8n-nodes-base.removeDuplicates",
       "position": [
-        -780,
-        380
+        -784,
+        384
       ],
-      "parameters": {},
       "typeVersion": 1.1
     },
     {
+      "parameters": {
+        "options": {}
+      },
       "id": "985ac7e3-b501-4079-a043-780677c94b52",
       "name": "Loop over queries",
       "type": "n8n-nodes-base.splitInBatches",
       "position": [
-        -1080,
-        -100
+        -1088,
+        -96
       ],
-      "parameters": {
-        "options": {}
-      },
       "typeVersion": 3
     },
     {
-      "id": "3a478935-781b-4fb1-bdc7-fcf8be1334bc",
-      "name": "Search Google Maps with query",
-      "type": "n8n-nodes-base.httpRequest",
-      "position": [
-        -1380,
-        380
-      ],
       "parameters": {
         "url": "=https://www.google.com/maps/search/{{ $json.query }}",
         "options": {
           "allowUnauthorizedCerts": false
         }
       },
+      "id": "3a478935-781b-4fb1-bdc7-fcf8be1334bc",
+      "name": "Search Google Maps with query",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1376,
+        384
+      ],
       "executeOnce": false,
       "typeVersion": 4.2,
       "alwaysOutputData": false
     },
     {
+      "parameters": {
+        "jsCode": "const data = $input.first().json.data\n\nconst regex = /https?:\\/\\/[^\\/]+/g\n\nconst urls = data.match(regex)\n\nreturn urls.map(url => ({json: {url: url}}))"
+      },
       "id": "477e7d55-b7d6-4b20-ac44-dd1f443e270a",
       "name": "Scrape URLs from results",
       "type": "n8n-nodes-base.code",
       "position": [
-        -1180,
-        380
+        -1184,
+        384
       ],
-      "parameters": {
-        "jsCode": "const data = $input.first().json.data\n\nconst regex = /https?:\\/\\/[^\\/]+/g\n\nconst urls = data.match(regex)\n\nreturn urls.map(url => ({json: {url: url}}))"
-      },
       "typeVersion": 2
     },
     {
-      "id": "a5b67e45-a3f6-41d2-aa58-c26a441c41b2",
-      "name": "Filter irrelevant URLs",
-      "type": "n8n-nodes-base.filter",
-      "position": [
-        -980,
-        380
-      ],
       "parameters": {
-        "options": {},
         "conditions": {
           "options": {
-            "version": 2,
-            "leftValue": "",
             "caseSensitive": true,
-            "typeValidation": "strict"
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
           },
           "combinator": "and",
           "conditions": [
@@ -95,139 +87,139 @@
               "rightValue": ""
             }
           ]
-        }
+        },
+        "options": {}
       },
+      "id": "a5b67e45-a3f6-41d2-aa58-c26a441c41b2",
+      "name": "Filter irrelevant URLs",
+      "type": "n8n-nodes-base.filter",
+      "position": [
+        -976,
+        384
+      ],
       "typeVersion": 2.2
     },
     {
-      "id": "40ec6d1f-1c98-4c9f-8499-c5893c3df7b9",
-      "name": "Request web page for URL",
-      "type": "n8n-nodes-base.httpRequest",
-      "onError": "continueRegularOutput",
-      "position": [
-        -380,
-        460
-      ],
       "parameters": {
         "url": "={{ $json.url }}",
         "options": {}
       },
+      "id": "40ec6d1f-1c98-4c9f-8499-c5893c3df7b9",
+      "name": "Request web page for URL",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -384,
+        464
+      ],
       "typeVersion": 4.2,
-      "alwaysOutputData": false
+      "alwaysOutputData": false,
+      "onError": "continueRegularOutput"
     },
     {
-      "id": "12f662a8-c55f-409a-b381-f37ab6dd3794",
-      "name": "Loop over URLs",
-      "type": "n8n-nodes-base.splitInBatches",
-      "onError": "continueErrorOutput",
-      "position": [
-        -580,
-        380
-      ],
       "parameters": {
         "options": {
           "reset": false
         }
       },
-      "typeVersion": 3
+      "id": "12f662a8-c55f-409a-b381-f37ab6dd3794",
+      "name": "Loop over URLs",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        -576,
+        384
+      ],
+      "typeVersion": 3,
+      "onError": "continueErrorOutput"
     },
     {
-      "id": "e6957d05-3533-48ae-9cc1-ee4ac026a2a6",
-      "name": "Loop over pages",
-      "type": "n8n-nodes-base.splitInBatches",
-      "onError": "continueErrorOutput",
-      "position": [
-        -360,
-        120
-      ],
       "parameters": {
         "options": {}
       },
+      "id": "e6957d05-3533-48ae-9cc1-ee4ac026a2a6",
+      "name": "Loop over pages",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        -368,
+        128
+      ],
       "typeVersion": 3,
-      "alwaysOutputData": false
+      "alwaysOutputData": false,
+      "onError": "continueErrorOutput"
     },
     {
-      "id": "018621c0-0ea9-4865-b110-b6d0727f0588",
-      "name": "Scrape emails from page",
-      "type": "n8n-nodes-base.code",
-      "onError": "continueRegularOutput",
-      "position": [
-        -200,
-        220
-      ],
       "parameters": {
         "mode": "runOnceForEachItem",
         "jsCode": "const data = $json.data\n\nconst emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.(?!png|jpg|gif|jpeg)[a-zA-Z]{2,}/g\n\nconst emails = data.match(emailRegex)\n\nreturn {json: {emails: emails}}"
       },
-      "typeVersion": 2
+      "id": "018621c0-0ea9-4865-b110-b6d0727f0588",
+      "name": "Scrape emails from page",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -208,
+        224
+      ],
+      "typeVersion": 2,
+      "onError": "continueRegularOutput"
     },
     {
-      "id": "5509b8e2-a6fc-4fbe-bbc5-1bc1d5de1c98",
-      "name": "Aggregate arrays of emails",
-      "type": "n8n-nodes-base.aggregate",
-      "position": [
-        -40,
-        100
-      ],
       "parameters": {
-        "options": {
-          "mergeLists": true
-        },
         "fieldsToAggregate": {
           "fieldToAggregate": [
             {
               "fieldToAggregate": "emails"
             }
           ]
+        },
+        "options": {
+          "mergeLists": true
         }
       },
+      "id": "5509b8e2-a6fc-4fbe-bbc5-1bc1d5de1c98",
+      "name": "Aggregate arrays of emails",
+      "type": "n8n-nodes-base.aggregate",
+      "position": [
+        -48,
+        112
+      ],
       "typeVersion": 1
     },
     {
+      "parameters": {
+        "fieldToSplitOut": "emails",
+        "options": {}
+      },
       "id": "f1f01f03-b62e-453f-b938-ffe4f9b3f4de",
       "name": "Split out into default data structure",
       "type": "n8n-nodes-base.splitOut",
       "position": [
-        180,
-        100
+        192,
+        112
       ],
-      "parameters": {
-        "options": {},
-        "fieldToSplitOut": "emails"
-      },
       "typeVersion": 1
     },
     {
+      "parameters": {
+        "compare": "selectedFields",
+        "fieldsToCompare": "emails",
+        "options": {}
+      },
       "id": "ec27d665-d9c1-4f10-9c52-0d5ea89cbf77",
       "name": "Remove duplicate emails",
       "type": "n8n-nodes-base.removeDuplicates",
       "position": [
         400,
-        100
+        112
       ],
-      "parameters": {
-        "compare": "selectedFields",
-        "options": {},
-        "fieldsToCompare": "emails"
-      },
       "typeVersion": 1.1
     },
     {
-      "id": "4a071bf0-23ad-455b-b231-bafd3b32e4f8",
-      "name": "Filter irrelevant emails",
-      "type": "n8n-nodes-base.filter",
-      "position": [
-        600,
-        100
-      ],
       "parameters": {
-        "options": {},
         "conditions": {
           "options": {
-            "version": 2,
-            "leftValue": "",
             "caseSensitive": true,
-            "typeValidation": "strict"
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
           },
           "combinator": "and",
           "conditions": [
@@ -241,19 +233,31 @@
               "rightValue": "=(google|gstatic|ggpht|schema\\.org|example\\.com|sentry\\.wixpress\\.com|sentry-next\\.wixpress\\.com|ingest\\.sentry\\.io|sentry\\.io|imli\\.com)"
             }
           ]
-        }
+        },
+        "options": {}
       },
+      "id": "4a071bf0-23ad-455b-b231-bafd3b32e4f8",
+      "name": "Filter irrelevant emails",
+      "type": "n8n-nodes-base.filter",
+      "position": [
+        608,
+        112
+      ],
       "typeVersion": 2.2
     },
     {
-      "id": "59675faa-2b0d-4ba5-82c7-dc5dedcad31e",
-      "name": "Save emails to Google Sheet",
-      "type": "n8n-nodes-base.googleSheets",
-      "position": [
-        800,
-        100
-      ],
       "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "1YGtGRbNNSeIuBv-cEF63NfcOGsIumByVFNVL4EF2JrE"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0"
+        },
         "columns": {
           "value": {
             "Emails": "={{ $json.emails }}"
@@ -275,19 +279,15 @@
             "Emails"
           ]
         },
-        "options": {},
-        "operation": "append",
-        "documentId": {
-          "__rl": true,
-          "mode": "list",
-          "value": "YOUR_GOOGLE_SHEET_ID"
-        },
-        "sheetName": {
-          "__rl": true,
-          "mode": "list",
-          "value": "gid=0"
-        }
+        "options": {}
       },
+      "id": "59675faa-2b0d-4ba5-82c7-dc5dedcad31e",
+      "name": "Save emails to Google Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        800,
+        112
+      ],
       "typeVersion": 4.5,
       "credentials": {
         "googleSheetsOAuth2Api": {
@@ -297,42 +297,58 @@
       }
     },
     {
+      "parameters": {},
       "id": "93437e8b-4f8d-40a1-9585-cab1b556164a",
       "name": "Starts scraper workflow",
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "position": [
         -1600,
-        380
+        384
       ],
-      "parameters": {},
       "typeVersion": 1
     },
     {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "velcora-leadgen",
+        "webhookId": "velcora-leadgen"
+      },
       "id": "eed77477-777d-450d-a975-4d2848b1cf55",
-      "name": "Run workflow",
-      "type": "n8n-nodes-base.manualTrigger",
+      "name": "Trigger",
+      "type": "n8n-nodes-base.webhook",
       "position": [
-        -1320,
-        -100
+        -1328,
+        -96
       ],
-      "parameters": {},
-      "typeVersion": 1
+      "typeVersion": 1,
+      "webhookId": "velcora-leadgen"
     },
     {
+      "parameters": {
+        "amount": 2
+      },
       "id": "dffaf04e-d1d2-4002-9a69-f0904b61fc2d",
       "name": "Wait between executions",
       "type": "n8n-nodes-base.wait",
       "position": [
-        -700,
+        -704,
         0
       ],
       "webhookId": "40eb11a9-0f7d-4932-993e-0052b69dbf9b",
-      "parameters": {
-        "amount": 2
-      },
       "typeVersion": 1.1
     },
     {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $workflow.id }}"
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
       "id": "18787007-1d11-41b9-89c3-d5f69756eda7",
       "name": "Execute scraper for query",
       "type": "n8n-nodes-base.executeWorkflow",
@@ -340,158 +356,133 @@
         -880,
         0
       ],
-      "parameters": {
-        "mode": "each",
-        "options": {
-          "waitForSubWorkflow": false
-        },
-        "workflowId": {
-          "__rl": true,
-          "mode": "id",
-          "value": "={{ $workflow.id }}"
-        }
-      },
       "typeVersion": 1.1
     },
     {
+      "parameters": {
+        "content": "## Setup\n1. Send a POST request to this workflow's webhook with your list of search queries (format: business type in location, e.g. \"cafes in Mumbai\").\n2. Connect your Google account in the Google Sheets node and pick the document + sheet to save emails to.\n3. Run the workflow and start collecting leads into your Google Sheet.",
+        "height": 180,
+        "width": 740,
+        "color": 5
+      },
       "id": "67fcde25-05e4-437c-b799-4448baea7891",
       "name": "Note",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -2280,
-        -140
+        -2288,
+        -144
       ],
-      "parameters": {
-        "color": 5,
-        "width": 740,
-        "height": 180,
-        "content": "## Setup\n1. Add your list of search queries in the \"Run workflow\" manual trigger node (format: business type in location, e.g. \"cafes in Mumbai\").\n2. Connect your Google account in the Google Sheets node and pick the document + sheet to save emails to.\n3. Run the workflow and start collecting leads into your Google Sheet."
-      },
       "typeVersion": 1
     },
     {
+      "parameters": {
+        "content": "Optional: set the wait time between each query execution. Default is 2 seconds.",
+        "height": 100,
+        "color": 6
+      },
       "id": "ac880457-44b4-4ff7-8440-b4107f8468bb",
       "name": "Note2",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -700,
-        -120
+        -704,
+        -128
       ],
-      "parameters": {
-        "color": 6,
-        "height": 100,
-        "content": "Optional: set the wait time between each query execution. Default is 2 seconds."
-      },
       "typeVersion": 1
     },
     {
+      "parameters": {
+        "content": "### Scraper\nThis workflow runs in the background for each query. Click the \"All executions\" tab in the left sidebar to see executions running.",
+        "height": 100,
+        "width": 480
+      },
       "id": "d83afb3d-7b71-4b47-9b50-28837aac408c",
       "name": "Note3",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         -1600,
-        260
+        272
       ],
-      "parameters": {
-        "width": 480,
-        "height": 100,
-        "content": "### Scraper\nThis workflow runs in the background for each query. Click the \"All executions\" tab in the left sidebar to see executions running."
-      },
       "typeVersion": 1
     },
     {
+      "parameters": {
+        "content": "1. Setup your Google credentials (OAuth2).\n2. Choose which document and sheet to save the scraped emails to.",
+        "height": 180,
+        "color": 4
+      },
       "id": "007b621a-3d41-4358-aa45-560a3c8e3414",
       "name": "Note4",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        820,
-        300
+        832,
+        304
       ],
-      "parameters": {
-        "color": 4,
-        "height": 180,
-        "content": "1. Setup your Google credentials (OAuth2).\n2. Choose which document and sheet to save the scraped emails to."
-      },
       "typeVersion": 1
     },
     {
+      "parameters": {
+        "content": "## Note\n\nQuestions? Reach out to Velcora AI - we build custom n8n automations.",
+        "color": 3
+      },
       "id": "fc0b837f-624c-4d25-8ed7-f787f76c785b",
       "name": "Note5",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         -1760,
-        -360
+        -368
       ],
-      "parameters": {
-        "color": 3,
-        "content": "## Note\n\nQuestions? Reach out to Velcora AI - we build custom n8n automations."
-      },
       "typeVersion": 1
     },
     {
+      "parameters": {
+        "content": "## Velcora Lead Engine\n\nAutomatically scrapes business emails from Google Maps based on a list of queries you provide. No paid APIs - uses only n8n core nodes. Built by Velcora AI.",
+        "height": 140,
+        "width": 480,
+        "color": 7
+      },
       "id": "2f8665d5-2890-4f7d-908b-9c09a66b6c93",
       "name": "Note6",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -2280,
-        -360
+        -2288,
+        -368
       ],
-      "parameters": {
-        "color": 7,
-        "width": 480,
-        "height": 140,
-        "content": "## Velcora AI - Lead Generation System\n\nAutomatically scrapes business emails from Google Maps based on a list of queries you provide. No paid APIs - uses only n8n core nodes."
-      },
       "typeVersion": 1
     },
     {
+      "parameters": {
+        "content": "Optional: add or change the regex for filtering irrelevant URLs.",
+        "height": 100,
+        "width": 160,
+        "color": 6
+      },
       "id": "7414b2ed-259d-47da-bbd1-d9ce0d64d43c",
       "name": "Note7",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        -1000,
-        540
+        -1008,
+        544
       ],
-      "parameters": {
-        "color": 6,
-        "width": 160,
-        "height": 100,
-        "content": "Optional: add or change the regex for filtering irrelevant URLs."
-      },
       "typeVersion": 1
     },
     {
+      "parameters": {
+        "content": "Optional: add or change the regex for filtering irrelevant/incorrect email addresses.",
+        "height": 100,
+        "width": 200,
+        "color": 6
+      },
       "id": "789c9a02-e6e7-4ea6-a7a2-acc7715b377a",
       "name": "Note8",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        580,
-        260
+        592,
+        272
       ],
-      "parameters": {
-        "color": 6,
-        "width": 200,
-        "height": 100,
-        "content": "Optional: add or change the regex for filtering irrelevant/incorrect email addresses."
-      },
       "typeVersion": 1
     }
   ],
-  "settings": {
-    "executionOrder": "v1"
-  },
   "connections": {
-    "Run workflow": {
-      "main": [
-        [
-          {
-            "node": "Loop over queries",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Loop over URLs": {
       "main": [
         [
@@ -682,6 +673,23 @@
           }
         ]
       ]
+    },
+    "Trigger": {
+      "main": [
+        [
+          {
+            "node": "Loop over queries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
-  }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {}
 }
