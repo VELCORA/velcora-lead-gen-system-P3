@@ -1,6 +1,6 @@
-# AI Lead Generation System - Velcora AI
+# Velcora Lead Engine
 
-Automatically scrapes business emails from Google Maps based on a list of queries. Built from the proven n8n template (206K views, 0 paid APIs — only n8n core nodes).
+Automatically scrapes business emails from Google Maps based on a list of queries. Pure n8n core nodes, zero paid APIs.
 
 ## What It Does
 
@@ -15,19 +15,18 @@ Automatically scrapes business emails from Google Maps based on a list of querie
 
 | Item | Value |
 |------|-------|
-| Template source | https://n8n.io/workflows/2567 (MIT, 206,002 views) |
-| n8n workflow ID | `hwiZNuABczj2Cd4y` |
-| Workflow name | AI Lead Generation System - Velcora AI |
+| Workflow name | Velcora Lead Engine |
 | Nodes | 26 (core nodes only) |
 | Cost | $0 — no paid APIs |
 | Status | Active in n8n (localhost:5678) |
 
+> ⚠️ The setup guide and Fiverr gig template reference older iterations of this engine. The `workflow.json` in this repo is the current, full Velcora Lead Engine.
+
 ## Files
 
-- `workflow.json` — importable workflow (rebranded for Velcora AI)
-- `template-2567-raw.json` — untouched original template API response
+- `workflow.json` — importable n8n workflow
 - `SETUP.md` — step-by-step setup guide
-- `FIVERR-GIG.md` — Fiverr gig listing template
+- `FIVERR-GIG.md` — service listing template for delivering this engine
 
 ## How to Use
 

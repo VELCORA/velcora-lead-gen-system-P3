@@ -1,4 +1,4 @@
-# SETUP — AI Lead Generation System (Velcora AI)
+# SETUP — Velcora Lead Engine
 
 ## Prerequisites
 
@@ -34,7 +34,7 @@
 ## STEP 3: Connect It in n8n
 
 1. Go to your n8n tab: **http://localhost:5678**
-2. Click on workflow: **AI Lead Generation System - Velcora AI**
+2. Click on workflow: **Velcora Lead Engine**
 3. Double-click the last node: **Save emails to Google Sheet**
 4. In the **Document ID** field, paste the Sheet ID you copied in Step 2.
 5. Click **Save** in the top right.
